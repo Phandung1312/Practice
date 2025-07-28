@@ -94,11 +94,35 @@ const int dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 #define endl '\n'
 #define sp ' '
 
-
+void process(vll& b, int n){
+    ll min = b[0];
+    FOR(i, 1, n){
+        ll a = b[i];
+        if(a <= min) {
+            min = a;
+            continue;
+        };
+        if(min == 1 || (a / (min)) > 1){
+            cout << "NO" << endl;
+            return;
+        } 
+    }
+    cout << "YES" << endl;
+}
 
 int main() {
     fast_io;
-    
+    int t;
+    cin >> t;
+    while(t--){
+        int n;
+        cin >> n;
+        vll b(n);
+        FORN(i, n){
+            cin >> b[i];
+        }
+        process(b, n);
+    }
     return 0;
 }
 

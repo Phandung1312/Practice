@@ -94,11 +94,40 @@ const int dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 #define endl '\n'
 #define sp ' '
 
+// #include "../../debug.h"
+void process(vll &a,int n, int c){
+      
+    sort(a.begin(), a.end(), greater<int>());
+    // DBGV(a);
+    int count = 0;
+    int cost = n;
+    FORN(i, n){
+        if(c - (a[i] * pow(2, count) ) >= 0){
+            count++;
+            cost--;
+        }
+    
+    }
+    cout << cost << endl;
+}
 
 
 int main() {
     fast_io;
-    
+    int t;
+    cin >> t;
+    while(t--){
+        int n;
+    ll c;
+    cin >> n;
+    cin >> c;
+
+    vll a(n);
+    FORN(i, n){
+        cin >> a[i];
+    }
+    process(a, n, c);
+    }
     return 0;
 }
 
