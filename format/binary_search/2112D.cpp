@@ -74,14 +74,51 @@ const int dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 #define sp ' '
 
 #define int long long
+// #include "../../debug.h"
+int process(vi& a, int n){
+    sort(a.begin(), a.end());
 
+    // if(n <= 3) return a[0] + a[1] > a[2] ? 1 : 0;
+    int bob = a.back();
+   
+    int ans = 0;
+
+    for(int i = n - 1; i >= 2; i--){
+        int current = a[i] ;
+        int l = 0;
+        int r = i - 1;
+        while(l < r){
+            int sum = a[l] + a[r];
+            if(sum + current > bob && sum > current)
+            {
+            // debug(ans,current,a[l], a[r], r, l);
+                ans += r - l;
+                r--;
+            }
+            else
+            {
+                l++;
+            }
+        }
+    }
+
+    return ans;
+}
 
 int32_t main() {
     fast_io;
     int t;
     cin >> t;
     while(t--){
-        
+        int n;
+        cin >> n;
+        vi a(n);
+        FORN(i, n){
+            cin >> a[i];
+        }
+        cout << process(a, n) << endl;
     }
     return 0;
 }
+
+

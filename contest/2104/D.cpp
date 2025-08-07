@@ -2,6 +2,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// ==================== TYPE DEFINITIONS ====================
+// Basic types
 typedef long long ll;
 typedef unsigned long long ull;
 typedef long double ld;
@@ -9,6 +11,7 @@ typedef pair<int, int> pii;
 typedef pair<ll, ll> pll;
 typedef pair<double, double> pdd;
 
+// Vector shortcuts
 typedef vector<int> vi;
 typedef vector<ll> vll;
 typedef vector<double> vd;
@@ -18,18 +21,21 @@ typedef vector<pll> vpll;
 typedef vector<vi> vvi;
 typedef vector<vll> vvll;
 
+// Set shortcuts
 typedef set<int> si;
 typedef set<ll> sll;
 typedef set<string> ss;
 typedef multiset<int> msi;
 typedef multiset<ll> msll;
 
+// Map shortcuts
 typedef map<int, int> mii;
 typedef map<ll, ll> mll;
 typedef map<string, int> msi_str;
 typedef unordered_map<int, int> umii;
 typedef unordered_map<ll, ll> umll;
 
+// ==================== CONSTANTS ====================
 const int INF = 1e9 + 7;
 const ll LINF = 1e18;
 const double EPS = 1e-9;
@@ -81,7 +87,14 @@ int32_t main() {
     int t;
     cin >> t;
     while(t--){
-        
+        int n;
+        cin >> n;
+        vi a(n);
+        FORN(i, n){
+            cin >> a[i];
+        }
     }
     return 0;
 }
+
+

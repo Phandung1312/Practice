@@ -75,13 +75,36 @@ const int dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
 #define int long long
 
-
+int n, m;
+vi a;
+vi b;
+int process(){
+    FORN(i,n){
+       int current = a[i];     
+    }
+    
+    return 1;
+}
 int32_t main() {
     fast_io;
     int t;
     cin >> t;
     while(t--){
-        
+      
+        cin >> n >> m;
+        a.resize(n);
+        b.resize(m);
+        FORN(i, n){
+            cin >> a[i];
+        }
+
+        FORN(i, m){
+            cin >> b[i];
+        }
+
+        process();
     }
     return 0;
 }
+
+

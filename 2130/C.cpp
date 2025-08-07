@@ -81,7 +81,10 @@ int32_t main() {
     int t;
     cin >> t;
     while(t--){
-        
+        int q;
+        cin >> q;
     }
     return 0;
 }
+
+

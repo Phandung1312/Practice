@@ -75,13 +75,57 @@ const int dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
 #define int long long
 
+void process(vi& a, int n, int s){
+    int numZero = 0;
+    int numOne = 0;
+    int numTwo = 0;
+    int sum = 0;
+
+    FORN(i, n){
+        if(a[i] == 0) numZero++;
+        if(a[i] == 1) numOne++;
+        if(a[i] == 2) numTwo++;
+        sum += a[i];
+    }
+     if(s < sum){
+        FORN(i, n){
+            cout << a[i] << " ";
+        }
+        cout << endl;
+        return;
+    }   
+    if(s != sum + 1) {
+        cout << -1 << endl;
+        return;
+    };
+    
+    FORN(i, numZero){
+        cout << 0 << " ";
+    }
+    FORN(i, numTwo){
+        cout << 2 << " ";
+    }
+    FORN(i, numOne){
+        cout << 1 << " ";
+    }
+    cout << endl;
+    
+}
 
 int32_t main() {
     fast_io;
     int t;
     cin >> t;
     while(t--){
-        
+        int n, s;
+        cin >> n >> s;
+        vi a(n);
+        FORN(i, n){
+            cin >> a[i];
+        }
+        process(a, n, s);
     }
     return 0;
 }
+
+
