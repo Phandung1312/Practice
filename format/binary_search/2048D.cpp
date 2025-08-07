@@ -118,7 +118,9 @@ int n, m;
 int kenvin;
 int  process(int k){
     int num = m / k;
-
+    auto it = upper_bound(b.begin(), b.end(), kenvin);
+    int index = a.end() - it;
+    
     return 1;
 }
 

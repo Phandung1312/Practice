@@ -118,8 +118,6 @@ int  process(vi& a, int n){
     int ans = MAXX;
     for(int i = 0; i < n - 2; i++){
         auto it = lower_bound(a.begin(), a.end(), a[i] + a[i + 1]);
-   
-    
         // debug
         ans = min(ans, i + (a.end() - it));
         debug( ans, i);
