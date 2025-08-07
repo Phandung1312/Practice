@@ -74,8 +74,8 @@ const int dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 #define sp ' '
 
 #define int long long
-const long long MAXX = 9223372036854775807LL;
-const long long MINX = -9223372036854775808LL;
+const long long MAXX = 2e18;
+const long long MINX = -2e18;
 
 
 #define DEBUG 0
