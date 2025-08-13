@@ -112,17 +112,36 @@ void _debug(const char* names, Args&&... args) {
 #define del
 #define debug(...)
 #endif
-
-void process(){
-
+bool process(vi&a, int n){
+    int first = -1;
+    FORN(i, n ){
+    debug(first, i, a[i]);
+        if(a[i] == -1) continue;
+        if(a[i] == 0) return false;
+        if(first != -1 && a[i] != first){
+            // debug(first, i, a[i]); 
+            return false;
+        }
+        else if(a[i] != -1){
+            first = a[i];  
+        }
+    }
+    return true;
 }
 int32_t main() {
     fast_io;
     int t;
     cin >> t;
     while(t--){
-        
-        process();
+        int n;
+        cin >> n;
+        vi a(n);
+        FORN(i, n){
+            cin >> a[i];
+        }
+        if(process(a, n) ) cout << "YES";
+        else cout << "NO";
+        cout << endl;
     }
     return 0;
 }

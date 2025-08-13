@@ -78,7 +78,7 @@ const long long MAXX = 2e18;
 const long long MINX = -2e18;
 
 
-#define DEBUG 0
+#define DEBUG 1
  
 #if DEBUG
 #define del cout << '\n'
@@ -113,15 +113,69 @@ void _debug(const char* names, Args&&... args) {
 #define debug(...)
 #endif
 
+vi a, b;
+int n, m;
 void process(){
 
+    int sum = 0;
+    int proSlot = n;
+    int testSlot = m;
+    int badIndex = n + m;
+    bool isPro = true;
+    FORN(i, n + m){
+        if(a[i] > b[i] && proSlot > 0 || testSlot < 1){
+            sum += a[i];
+            proSlot--;
+            if(a[i] <= b[i]){
+                mini(badIndex, i);
+                isPro = true;
+            }
+        }
+        else{
+            sum += b[i];
+            testSlot--;
+            if(a[i] > b[i]){
+                mini(badIndex, i);
+                isPro = false;
+            }
+        }
+    }
+
+    FORN(i, n + m + 1){
+        int change = 0;
+        if(i < badIndex){
+            bool isCurrentPro = a[i] > b[i];
+        
+            if(isCurrentPro != isPro){
+                change = isPro ? (b[badIndex] - b[i]) +  (a[n + m] - a[badIndex]) : (a[badIndex] - a[i]) + (b[n + m] - b[badIndex]) ;
+            }
+            else{
+                change = isPro ? (a[n+m] - a[i]) : (b[n+m] - b[i]);
+            }
+        }
+        else{
+              change = isPro ? (a[n+m] - a[i]) : (b[n+m] - b[i]);
+        }
+        // debug(sum, change, i);
+        cout << sum + change << " ";
+    }
+    cout << endl;
+    // debug(sum, badIndex);
 }
 int32_t main() {
     fast_io;
     int t;
     cin >> t;
     while(t--){
-        
+        cin >> n >> m;
+        a.assign(n + m + 1, 0);
+        b.assign(n + m + 1, 0);
+        FORN(i, n + m + 1){
+            cin >> a[i];
+        }
+        FORN(i, n + m + 1){
+            cin >> b[i];
+        }
         process();
     }
     return 0;

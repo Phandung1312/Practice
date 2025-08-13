@@ -78,7 +78,7 @@ const long long MAXX = 2e18;
 const long long MINX = -2e18;
 
 
-#define DEBUG 0
+#define DEBUG 1
  
 #if DEBUG
 #define del cout << '\n'
@@ -113,15 +113,45 @@ void _debug(const char* names, Args&&... args) {
 #define debug(...)
 #endif
 
-void process(){
-
+vector<pair<int, int>> a;
+int n, k;
+int sumV(){
+    int v = 0;
+    for(int i = 0; i < n; i++){
+        v += abs(a[i].first - a[i].second);
+    }
+    //debug(a, b, v);
+    return v;
 }
+
+void process(){
+    for(int i = 0; i < n; i++){
+        if(a[i].first < a[i].second){
+            swap(a[i].first, a[i].second);
+        }
+    }
+    sort(a.begin(), a.end(), [](const pair<int, int>& a, const pair<int, int>& b){
+        if(a.first < b.first) return true;
+        return a.second < b.second;
+    });
+    debug(a);
+    cout << sumV() << endl;
+}
+
 int32_t main() {
     fast_io;
     int t;
     cin >> t;
     while(t--){
-        
+
+        cin >> n >> k;
+        a.resize(n);
+        FORN(i, n){
+            cin >> a[i].first;
+        }
+        FORN(i, n){
+            cin >> a[i].second;
+        }
         process();
     }
     return 0;

@@ -78,7 +78,7 @@ const long long MAXX = 2e18;
 const long long MINX = -2e18;
 
 
-#define DEBUG 0
+#define DEBUG 1
  
 #if DEBUG
 #define del cout << '\n'
@@ -113,15 +113,27 @@ void _debug(const char* names, Args&&... args) {
 #define debug(...)
 #endif
 
+int n, m, v;
+vi a;
 void process(){
+    vi pref(n);
+    pref[0] = a[0];
+    FOR(i, 1, n){
+        pref[i] = a[i] + pref[i - 1];
+    }
 
+    debug(pref);
 }
 int32_t main() {
     fast_io;
     int t;
     cin >> t;
     while(t--){
-        
+        cin >> n >> m >> v;
+        a.resize(n);
+        FORN(i, n){
+            cin >> a[i];
+        }
         process();
     }
     return 0;

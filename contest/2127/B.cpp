@@ -112,17 +112,36 @@ void _debug(const char* names, Args&&... args) {
 #define del
 #define debug(...)
 #endif
-
-void process(){
-
+int process(int n, int x, string s){
+    int leftWall = 0;
+    FOR(i, 0, x - 1){
+        if(s[i] == '#'){
+            leftWall = i + 1;
+        }
+    }
+    int rightWall = n + 1;
+    FORR(i, n - 1, x ){
+          if(s[i] == '#'){
+            rightWall = i + 1;
+        }
+    }
+    debug(s, leftWall, rightWall);
+    
+   return max(min(x, n - rightWall + 2), min(leftWall + 1, n - x + 1)) ;
+    
+ 
 }
 int32_t main() {
     fast_io;
     int t;
     cin >> t;
     while(t--){
-        
-        process();
+        int n, x;
+        cin >> n >> x;
+        string s;
+        cin.ignore();
+        getline(cin, s);
+        cout << process(n, x, s) << endl;
     }
     return 0;
 }
