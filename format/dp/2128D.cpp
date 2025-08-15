@@ -113,67 +113,21 @@ void _debug(const char* names, Args&&... args) {
 #define debug(...)
 #endif
 
-int n, m, v;
-vll a;
-int bfs( vll& suf, int start, int target){
-    if(target <= 0) return n + 1;
-    if(suf[start] < target) return -1;
-    int r =  n + 1;
-    int l = start;
-    int index = -1;
-    while(l <= r){
-        int mid = l + (r - l)/2 ;
-        if(suf[mid] >= target){
-            index = mid;
-            l = mid + 1;
+int n;
+vi p;
+int  process(){
+    vll dp(n + 1, 0);
+    dp[n - 1] = 1;
+    int ans = 1;
+    FORRN(i, n - 1){
+        if(p[i] > p[i + 1]){
+            dp[i] = dp[i + 1] + n - i;
         }
         else{
-            r = mid - 1;
+            dp[i] = dp[i + 2] + n - i;
         }
+        ans += dp[i];
     }
-    return index;
-}
-int process(){
-    vll pref(n + 1, 0);
-    vll prefSum(n + 1);
-    int currentSum = 0;
-    int sumCake = 0;
-
-    FOR(i, 1, n + 1){
-        currentSum += a[i - 1];
-        if(currentSum >= v){
-            sumCake++;
-            currentSum = 0;
-        }
-        pref[i] = sumCake;
-    prefSum[i] = prefSum[i - 1] + a[i - 1];
-    }
-    if(pref[n] < m) return -1;
-    vll suf(n + 2, 0);
-
-    currentSum = 0;
-    sumCake = 0;
-    FORR(i, n, 1){
-        currentSum += a[i - 1];
-        if(currentSum >= v){
-            sumCake++;
-            currentSum = 0;
-        }
-        suf[i] = sumCake;
-    }
-    int ans = 0;
-  
-    FOR(i, 1, n + 1){
-   
-        int target = m - pref[i - 1];
-        int r = bfs(suf, i + 1, target);
-        if(r <= i) continue;
-    
-        maxi(ans, (prefSum[r - 1] - prefSum[i - 1]) * 1LL);
-        //   debug(i, target, r, ans);
-            // debug(prefSum,pref, suf);
-    }
-    // debug(prefSum,pref, suf);
     return ans;
 }
 int32_t main() {
@@ -181,10 +135,10 @@ int32_t main() {
     int t;
     cin >> t;
     while(t--){
-        cin >> n >> m >> v;
-        a.resize(n);
+        cin >> n;
+        p.resize(n);
         FORN(i, n){
-            cin >> a[i];
+            cin >> p[i];
         }
         cout << process() << endl;
     }

@@ -5,11 +5,11 @@ using namespace std;
 typedef long long ll;
 typedef unsigned long long ull;
 typedef long double ld;
-typedef pair<int, int> pii;
+typedef pair<long long, long long> pii;
 typedef pair<ll, ll> pll;
 typedef pair<double, double> pdd;
 
-typedef vector<int> vi;
+typedef vector<long long> vi;
 typedef vector<ll> vll;
 typedef vector<double> vd;
 typedef vector<string> vs;
@@ -18,16 +18,16 @@ typedef vector<pll> vpll;
 typedef vector<vi> vvi;
 typedef vector<vll> vvll;
 
-typedef set<int> si;
+typedef set<long long> si;
 typedef set<ll> sll;
 typedef set<string> ss;
-typedef multiset<int> msi;
+typedef multiset<long long> msi;
 typedef multiset<ll> msll;
 
-typedef map<int, int> mii;
+typedef map<long long, long long> mii;
 typedef map<ll, ll> mll;
-typedef map<string, int> msi_str;
-typedef unordered_map<int, int> umii;
+typedef map<string, long long> msi_str;
+typedef unordered_map<long long, long long> umii;
 typedef unordered_map<ll, ll> umll;
 
 const int INF = 1e9 + 7;
@@ -113,67 +113,26 @@ void _debug(const char* names, Args&&... args) {
 #define debug(...)
 #endif
 
-int n, m, v;
-vll a;
-int bfs( vll& suf, int start, int target){
-    if(target <= 0) return n + 1;
-    if(suf[start] < target) return -1;
-    int r =  n + 1;
-    int l = start;
-    int index = -1;
-    while(l <= r){
-        int mid = l + (r - l)/2 ;
-        if(suf[mid] >= target){
-            index = mid;
-            l = mid + 1;
-        }
-        else{
-            r = mid - 1;
-        }
-    }
-    return index;
-}
+int n, b, c;
+vi d, p, f;
 int process(){
-    vll pref(n + 1, 0);
-    vll prefSum(n + 1);
-    int currentSum = 0;
-    int sumCake = 0;
-
-    FOR(i, 1, n + 1){
-        currentSum += a[i - 1];
-        if(currentSum >= v){
-            sumCake++;
-            currentSum = 0;
+    vector<vi> dp(n + 1, vi(c  + 1, MAXX));
+    dp[0][b] = 0;
+    FOR(i,1, n + 1){ 
+        FOR(charge, 0, c + 1){
+            if(charge >= d[i]){
+                dp[i][charge - d[i]] = dp[i - 1][charge];
+                debug(charge);
+            }
+            int pay = dp[i - 1][charge] > MAXX - d[i] * f[i] ? MAXX : dp[i - 1][charge] + d[i] * f[i] ;
+            dp[i][min(c, charge + p[i])] = pay;
         }
-        pref[i] = sumCake;
-    prefSum[i] = prefSum[i - 1] + a[i - 1];
     }
-    if(pref[n] < m) return -1;
-    vll suf(n + 2, 0);
-
-    currentSum = 0;
-    sumCake = 0;
-    FORR(i, n, 1){
-        currentSum += a[i - 1];
-        if(currentSum >= v){
-            sumCake++;
-            currentSum = 0;
-        }
-        suf[i] = sumCake;
+    int ans = MAXX;
+    FOR(i, b, c + 1){
+        mini(ans, dp[n][i]);
     }
-    int ans = 0;
-  
-    FOR(i, 1, n + 1){
-   
-        int target = m - pref[i - 1];
-        int r = bfs(suf, i + 1, target);
-        if(r <= i) continue;
-    
-        maxi(ans, (prefSum[r - 1] - prefSum[i - 1]) * 1LL);
-        //   debug(i, target, r, ans);
-            // debug(prefSum,pref, suf);
-    }
-    // debug(prefSum,pref, suf);
+    debug(d, p, f);
     return ans;
 }
 int32_t main() {
@@ -181,10 +140,18 @@ int32_t main() {
     int t;
     cin >> t;
     while(t--){
-        cin >> n >> m >> v;
-        a.resize(n);
-        FORN(i, n){
-            cin >> a[i];
+        cin >> n >> b >> c;
+        d.resize(n + 1);
+        p.resize(n + 1);
+        f.resize(n + 1);
+        FOR(i,1, n + 1){
+            cin >> p[i];
+        }
+         FOR(i,1, n + 1){
+            cin >> f[i];
+        }
+         FOR(i,1, n + 1){
+            cin >> d[i];
         }
         cout << process() << endl;
     }

@@ -5,11 +5,11 @@ using namespace std;
 typedef long long ll;
 typedef unsigned long long ull;
 typedef long double ld;
-typedef pair<int, int> pii;
+typedef pair<long long, long long> pii;
 typedef pair<ll, ll> pll;
 typedef pair<double, double> pdd;
 
-typedef vector<int> vi;
+typedef vector<long long> vi;
 typedef vector<ll> vll;
 typedef vector<double> vd;
 typedef vector<string> vs;
@@ -18,16 +18,16 @@ typedef vector<pll> vpll;
 typedef vector<vi> vvi;
 typedef vector<vll> vvll;
 
-typedef set<int> si;
+typedef set<long long> si;
 typedef set<ll> sll;
 typedef set<string> ss;
-typedef multiset<int> msi;
+typedef multiset<long long> msi;
 typedef multiset<ll> msll;
 
-typedef map<int, int> mii;
+typedef map<long long, long long> mii;
 typedef map<ll, ll> mll;
-typedef map<string, int> msi_str;
-typedef unordered_map<int, int> umii;
+typedef map<string, long long> msi_str;
+typedef unordered_map<long long, long long> umii;
 typedef unordered_map<ll, ll> umll;
 
 const int INF = 1e9 + 7;
@@ -112,79 +112,67 @@ void _debug(const char* names, Args&&... args) {
 #define del
 #define debug(...)
 #endif
+vi r, d;
+int n;
+vector<char> s;
 
-int n, m, v;
-vll a;
-int bfs( vll& suf, int start, int target){
-    if(target <= 0) return n + 1;
-    if(suf[start] < target) return -1;
-    int r =  n + 1;
-    int l = start;
-    int index = -1;
-    while(l <= r){
-        int mid = l + (r - l)/2 ;
-        if(suf[mid] >= target){
-            index = mid;
-            l = mid + 1;
-        }
-        else{
-            r = mid - 1;
+bool isValid(int health){
+    FORN(i, n){
+        health -= r[i];
+        if(health <= 0 ) return false;
+        if(s[i] == '+') {
+         
+            if (health > MAXX - d[i]) {
+                health = MAXX;
+            } else {
+                health += d[i];
+            }
+        } else {
+          
+            if (d[i] != 0 && health > MAXX / d[i]) {
+                health = MAXX;
+            } else {
+                health *= d[i];
+            }
         }
     }
-    return index;
+    return true;
 }
 int process(){
-    vll pref(n + 1, 0);
-    vll prefSum(n + 1);
-    int currentSum = 0;
-    int sumCake = 0;
-
-    FOR(i, 1, n + 1){
-        currentSum += a[i - 1];
-        if(currentSum >= v){
-            sumCake++;
-            currentSum = 0;
-        }
-        pref[i] = sumCake;
-    prefSum[i] = prefSum[i - 1] + a[i - 1];
-    }
-    if(pref[n] < m) return -1;
-    vll suf(n + 2, 0);
-
-    currentSum = 0;
-    sumCake = 0;
-    FORR(i, n, 1){
-        currentSum += a[i - 1];
-        if(currentSum >= v){
-            sumCake++;
-            currentSum = 0;
-        }
-        suf[i] = sumCake;
-    }
+    int left = 1;
+    int right = MAXX;
     int ans = 0;
-  
-    FOR(i, 1, n + 1){
-   
-        int target = m - pref[i - 1];
-        int r = bfs(suf, i + 1, target);
-        if(r <= i) continue;
-    
-        maxi(ans, (prefSum[r - 1] - prefSum[i - 1]) * 1LL);
-        //   debug(i, target, r, ans);
-            // debug(prefSum,pref, suf);
+    // debug(r, s, d);
+    while(left <= right){
+        int mid = left + (right - left) / 2;
+        if(isValid(mid)){
+            ans = mid;
+            right = mid - 1;
+        }
+        else{
+            left = mid + 1;
+        }
     }
-    // debug(prefSum,pref, suf);
     return ans;
+
 }
 int32_t main() {
     fast_io;
     int t;
     cin >> t;
     while(t--){
-        cin >> n >> m >> v;
-        a.resize(n);
+        cin >> n;
+        r.resize(n);
+        s.resize(n);
+        d.resize(n);
         FORN(i, n){
-            cin >> a[i];
+            cin >> r[i];
+        }
+        FORN(i, n){
+            cin >> s[i];
+        }
+        FORN(i, n){
+            cin >> d[i];
         }
         cout << process() << endl;
     }

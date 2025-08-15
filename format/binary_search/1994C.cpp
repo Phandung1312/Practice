@@ -5,11 +5,11 @@ using namespace std;
 typedef long long ll;
 typedef unsigned long long ull;
 typedef long double ld;
-typedef pair<int, int> pii;
+typedef pair<long long , long long> pii;
 typedef pair<ll, ll> pll;
 typedef pair<double, double> pdd;
 
-typedef vector<int> vi;
+typedef vector<long long> vi;
 typedef vector<ll> vll;
 typedef vector<double> vd;
 typedef vector<string> vs;
@@ -18,16 +18,16 @@ typedef vector<pll> vpll;
 typedef vector<vi> vvi;
 typedef vector<vll> vvll;
 
-typedef set<int> si;
+typedef set<long long> si;
 typedef set<ll> sll;
 typedef set<string> ss;
-typedef multiset<int> msi;
+typedef multiset<long long> msi;
 typedef multiset<ll> msll;
 
-typedef map<int, int> mii;
+typedef map<long long, long long> mii;
 typedef map<ll, ll> mll;
-typedef map<string, int> msi_str;
-typedef unordered_map<int, int> umii;
+typedef map<string, long long> msi_str;
+typedef unordered_map<long long, long long> umii;
 typedef unordered_map<ll, ll> umll;
 
 const int INF = 1e9 + 7;
@@ -113,75 +113,50 @@ void _debug(const char* names, Args&&... args) {
 #define debug(...)
 #endif
 
-int n, m, v;
-vll a;
-int bfs( vll& suf, int start, int target){
-    if(target <= 0) return n + 1;
-    if(suf[start] < target) return -1;
-    int r =  n + 1;
-    int l = start;
+int n, x;
+vi a;
+int bfs(vi& pref, int startIndex){
+   
+    int r = n;
+    int l = startIndex;
     int index = -1;
     while(l <= r){
-        int mid = l + (r - l)/2 ;
-        if(suf[mid] >= target){
+        int mid = l + (r - l)/2;
+        if(pref[mid] - pref[startIndex - 1] <= x){
             index = mid;
             l = mid + 1;
         }
         else{
             r = mid - 1;
-        }
+        };
     }
     return index;
 }
 int process(){
-    vll pref(n + 1, 0);
-    vll prefSum(n + 1);
-    int currentSum = 0;
-    int sumCake = 0;
-
-    FOR(i, 1, n + 1){
-        currentSum += a[i - 1];
-        if(currentSum >= v){
-            sumCake++;
-            currentSum = 0;
-        }
-        pref[i] = sumCake;
-    prefSum[i] = prefSum[i - 1] + a[i - 1];
-    }
-    if(pref[n] < m) return -1;
-    vll suf(n + 2, 0);
-
-    currentSum = 0;
-    sumCake = 0;
-    FORR(i, n, 1){
-        currentSum += a[i - 1];
-        if(currentSum >= v){
-            sumCake++;
-            currentSum = 0;
-        }
-        suf[i] = sumCake;
+    vi pref(n + 1, 0);
+    FORN(i, n){
+        pref[i + 1] = pref[i] + a[i];
     }
     int ans = 0;
-  
+    // debug(pref);
     FOR(i, 1, n + 1){
-   
-        int target = m - pref[i - 1];
-        int r = bfs(suf, i + 1, target);
-        if(r <= i) continue;
-    
-        maxi(ans, (prefSum[r - 1] - prefSum[i - 1]) * 1LL);
-        //   debug(i, target, r, ans);
-            // debug(prefSum,pref, suf);
+        int index = bfs(pref, i);
+        if(index >= 0){
+            ans += index - i + 1;
+        }
+           debug(i,index, ans);
     }
-    // debug(prefSum,pref, suf);
+    
     return ans;
+    
 }
 int32_t main() {
     fast_io;
     int t;
     cin >> t;
     while(t--){
-        cin >> n >> m >> v;
+      
+        cin >> n >> x;
         a.resize(n);
         FORN(i, n){
             cin >> a[i];
