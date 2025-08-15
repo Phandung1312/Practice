@@ -122,10 +122,12 @@ int process(){
         FOR(charge, 0, c + 1){
             if(charge >= d[i]){
                 dp[i][charge - d[i]] = dp[i - 1][charge];
-                debug(charge);
             }
             int pay = dp[i - 1][charge] > MAXX - d[i] * f[i] ? MAXX : dp[i - 1][charge] + d[i] * f[i] ;
-            dp[i][min(c, charge + p[i])] = pay;
+            int newCharge = min(c, charge + p[i]);
+            dp[i][newCharge] = pay;
+            debug(i,dp[i][charge - d[i]]);
+            debug(i, c, p[i],newCharge,dp[i][newCharge]);
         }
     }
     int ans = MAXX;
