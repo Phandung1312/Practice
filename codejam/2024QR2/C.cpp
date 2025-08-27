@@ -43,10 +43,8 @@ const int dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
 #define FOR(i, a, b) for(int i = (a); i < (b); i++)
 #define FORN(i, n) for(int i = 0; i < (n); i++)
-#define FORE(i, n) for(int i = 1; i <= (n); i++)
 #define FORR(i, a, b) for(int i = (a); i >= (b); i--)
 #define FORRN(i, n) for(int i = (n-1); i >= 0; i--)
-#define FORRE(i, n) for(int i = (n); i >= 1; i--)
 #define FOREACH(it, v) for(auto it = v.begin(); it != v.end(); it++)
 #define FOREACHR(it, v) for(auto it = v.rbegin(); it != v.rend(); it++)
 

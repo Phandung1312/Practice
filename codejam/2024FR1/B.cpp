@@ -80,7 +80,7 @@ const long long MAXX = 2e18;
 const long long MINX = -2e18;
 
 
-#define DEBUG 0
+#define DEBUG 1
  
 #if DEBUG
 #define del cout << '\n'
@@ -115,15 +115,54 @@ void _debug(const char* names, Args&&... args) {
 #define debug(...)
 #endif
 
-void process(){
 
+int n;
+int m;
+vi x;
+
+int point(int a, int b){
+    if(a * b < 0) return 1;
+    if(a*b && abs(a) > abs(b)) return 1;
+    return 0;
+}
+void process(){
+    vi b;
+    unordered_set<int> S;
+    FORN(i, n){
+        S.insert(x[i]);
+    }
+    FORE(i, n){
+        if(!S.count(i)) b.pb(i);
+        if(!S.count(-i)) b.pb(-i);
+    }
+
+    vector<vector<int>> dp(1 << n, vector<int>(n + 1 , 0));
+    dp[0][0] = 1;
+    // debug(S, b);
+    FORN(mask, 1 << n){
+        int i = __builtin_popcount((unsigned) mask);    
+        FORN(s, i + 1){
+            if(dp[mask][s]){
+                FORN(j, n) if( !((mask >> j) & 1) ){
+                    int next = mask | ( 1 << j);
+                    int p = point(x[i], b[j]);
+                    dp[next][s + p] += dp[mask][s];
+                }
+            }
+        }
+    }
+    cout << dp[(1 << n) - 1][m] << endl;
 }
 int32_t main() {
     fast_io;
     int t;
     cin >> t;
     while(t--){
-        
+        cin >> n >> m;
+        x.resize(n);
+        FORN(i, n){
+            cin >> x[i];
+        }
         process();
     }
     return 0;

@@ -76,8 +76,8 @@ const int dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 #define sp ' '
 
 #define int long long
-const long long MAXX = 2e18;
-const long long MINX = -2e18;
+const long long MAXX = 1e18;
+const long long MINX = -1e18;
 
 
 #define DEBUG 0
@@ -115,15 +115,84 @@ void _debug(const char* names, Args&&... args) {
 #define debug(...)
 #endif
 
+int n;
+vector<vi> grid;
+vi a;
+vi b;
 void process(){
+    vector<vector<int>> dpR(n, vector<int>(2, MAXX));
+    dpR[0][0] = 0;
+    dpR[0][1] = a[0];
+    FOR(i, 1, n){
+        FORN(x, 2){
+            FORN(y, 2){
+                bool isValid = true;
+                FORN(j, n){
+                    isValid &= ( grid[i - 1][j] + y ) !=  ( grid[i][j] + x );
+                }
+                if(isValid){
+                    if(x == 1){
+                        dpR[i][1] = min(dpR[i][1], dpR[i - 1][y] + a[i]);
+                    }
+                    else if(x == 0){
+                        dpR[i][0] = min(dpR[i][0], dpR[i - 1][y]);
+                    }
+                }
+            }
+        }
+    }
+    debug(dpR);
+    vector<vector<int>> dpC(n, vector<int>(2, MAXX));
+    dpC[0][0] = 0;
+    dpC[0][1] = b[0];
+    FOR(j, 1, n){
+        FORN(x, 2){
+            FORN(y, 2){
+                bool isValid = true;
+                FORN(i, n){
+                    isValid &= (grid[i][j - 1] + y) != ( grid[i][j] + x ); 
+                }
+                if(isValid){
+                    if(x == 0){
+                        mini(dpC[j][0], dpC[j - 1][y]);
+                     }
+                     if(x == 1){
+                        mini(dpC[j][1], dpC[j - 1][y] + b[j]);
+                     }
 
+                }
+            }
+        }
+    }
+
+    int minR = min(dpR[n - 1][0], dpR[n - 1][1]);
+    int minC = min(dpC[n - 1][0], dpC[n - 1][1]);
+    if(minC >= MAXX || minR >= MAXX ) cout << -1 << endl;
+    else {
+        int ans = minR + minC;
+     cout << ans << endl;
+    }
 }
 int32_t main() {
     fast_io;
     int t;
     cin >> t;
     while(t--){
-        
+        cin >> n;
+        grid.assign(n, vector<int>(n));
+        a.resize(n);
+        b.resize(n);
+        FORN(i, n){
+            FORN(j, n){
+                cin >> grid[i][j];
+            }
+        }
+        FORN(i, n){
+            cin >> a[i];
+        }
+        FORN(i, n){
+            cin >> b[i];
+        }
         process();
     }
     return 0;

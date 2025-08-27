@@ -43,10 +43,8 @@ const int dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
 #define FOR(i, a, b) for(int i = (a); i < (b); i++)
 #define FORN(i, n) for(int i = 0; i < (n); i++)
-#define FORE(i, n) for(int i = 1; i <= (n); i++)
 #define FORR(i, a, b) for(int i = (a); i >= (b); i--)
 #define FORRN(i, n) for(int i = (n-1); i >= 0; i--)
-#define FORRE(i, n) for(int i = (n); i >= 1; i--)
 #define FOREACH(it, v) for(auto it = v.begin(); it != v.end(); it++)
 #define FOREACHR(it, v) for(auto it = v.rbegin(); it != v.rend(); it++)
 
@@ -80,7 +78,7 @@ const long long MAXX = 2e18;
 const long long MINX = -2e18;
 
 
-#define DEBUG 0
+#define DEBUG 1
  
 #if DEBUG
 #define del cout << '\n'
@@ -115,16 +113,80 @@ void _debug(const char* names, Args&&... args) {
 #define debug(...)
 #endif
 
+int n;
+string x;
+vi v;
 void process(){
+    int m = x.length();
+    vi digit(m);
 
+    FORN(i, m){
+
+        digit[i] = x[i] - '0'; 
+    }
+    
+
+    int total = 1 << (m - 1);
+    vector<vector<int>> result(total, vector<int>(3,0));
+    FORN(i, total){
+        int current = digit[0];
+        int sum = 0;
+        int firstPlus = m - 2;
+        int lastPlus = m - 2;
+        int numPlus = 0;
+
+        FORN(j, m - 1){
+            bool isPlus = i & ( 1 << j);
+            if(isPlus){
+                sum += current;
+                current = digit[j + 1];
+                numPlus++;
+                mini(firstPlus, j);
+            }
+            else{
+                current = current*10 + digit[j + 1];
+            }
+            if(j == m - 2){
+                sum += current;
+            }
+    
+        }  
+        result[i] ={sum, i, numPlus};
+    }
+    sort(result.begin(), result.end(), [&](const vi& a, const vi& b){
+        if(a[0] != b[0]) return a[0] < b[0];
+        FORN(i, total){
+            int ba = (a[1] >> i) &1;
+            int bb = (b[1] >> i) &1;
+            if(ba != bb) return ba > bb;
+        }
+        return false;
+    });
+    int sumS = 0;
+    int sumV = 0;
+    FORN(i, n){
+        sumS += result[v[i] - 1][0];
+    }
+    FORN(i, n){
+        sumV += result[v[i] - 1][2];
+    }
+    // debug(result, total, m);
+    cout << sumS << ' ' << sumV  ;
 }
 int32_t main() {
     fast_io;
     int t;
     cin >> t;
     while(t--){
-        
+        cin >> n ;
+        cin >> x;
+        v.resize(n);
+        FORN(i, n){
+            cin >> v[i];
+        }
+      
         process();
+        cout << endl;
     }
     return 0;
 }

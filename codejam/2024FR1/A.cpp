@@ -41,14 +41,14 @@ const int dy[] = {0, 0, -1, 1};
 const int dx8[] = {-1, -1, -1, 0, 0, 1, 1, 1};
 const int dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
-#define FOR(i, a, b) for(int i = (a); i < (b); i++)
-#define FORN(i, n) for(int i = 0; i < (n); i++)
-#define FORE(i, n) for(int i = 1; i <= (n); i++)
-#define FORR(i, a, b) for(int i = (a); i >= (b); i--)
-#define FORRN(i, n) for(int i = (n-1); i >= 0; i--)
-#define FORRE(i, n) for(int i = (n); i >= 1; i--)
-#define FOREACH(it, v) for(auto it = v.begin(); it != v.end(); it++)
-#define FOREACHR(it, v) for(auto it = v.rbegin(); it != v.rend(); it++)
+#define FOR(i, a, b) for (int i = (a); i < (b); i++)
+#define FORN(i, n) for (int i = 0; i < (n); i++)
+#define FORE(i, n) for (int i = 1; i <= (n); i++)
+#define FORR(i, a, b) for (int i = (a); i >= (b); i--)
+#define FORRN(i, n) for (int i = (n - 1); i >= 0; i--)
+#define FORRE(i, n) for (int i = (n); i >= 1; i--)
+#define FOREACH(it, v) for (auto it = v.begin(); it != v.end(); it++)
+#define FOREACHR(it, v) for (auto it = v.rbegin(); it != v.rend(); it++)
 
 #define all(v) v.begin(), v.end()
 #define rall(v) v.rbegin(), v.rend()
@@ -71,7 +71,10 @@ const int dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 #define maxi(a, b) a = max(a, b)
 #define mini(a, b) a = min(a, b)
 
-#define fast_io ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+#define fast_io                       \
+    ios_base::sync_with_stdio(false); \
+    cin.tie(NULL);                    \
+    cout.tie(NULL)
 #define endl '\n'
 #define sp ' '
 
@@ -79,32 +82,38 @@ const int dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 const long long MAXX = 2e18;
 const long long MINX = -2e18;
 
+#define DEBUG 1
 
-#define DEBUG 0
- 
 #if DEBUG
 #define del cout << '\n'
 #define debug(...) _debug(#__VA_ARGS__, __VA_ARGS__)
 template <class X, class Y>
-ostream& operator<<(ostream& os, pair<X, Y> const& p) {
+ostream &operator<<(ostream &os, pair<X, Y> const &p)
+{
     return os << "(" << p.first << ", " << p.second << ")";
 }
 template <class Ch, class Tr, class Container>
-basic_ostream<Ch, Tr>& operator<<(basic_ostream<Ch, Tr>& os, Container const& x) {
+basic_ostream<Ch, Tr> &operator<<(basic_ostream<Ch, Tr> &os, Container const &x)
+{
     int i = 0, n = (int)distance(x.begin(), x.end());
     os << "{ ";
-    for (const auto& y : x) os << y << (++i < n ? ", " : "");
+    for (const auto &y : x)
+        os << y << (++i < n ? ", " : "");
     return os << " }";
 }
 template <typename... Args>
-void _debug(const char* names, Args&&... args) {
+void _debug(const char *names, Args &&...args)
+{
     string_view s(names);
     cout << "{ ";
     size_t i = 0, cnt = 0, n = sizeof...(args);
-    auto next = [&]() {
-        while (i < s.size() && (s[i] == ' ' || s[i] == ',')) ++i;
+    auto next = [&]()
+    {
+        while (i < s.size() && (s[i] == ' ' || s[i] == ','))
+            ++i;
         size_t st = i;
-        while (i < s.size() && s[i] != ',') ++i;
+        while (i < s.size() && s[i] != ',')
+            ++i;
         return s.substr(st, i - st);
     };
     ((cout << next() << ": " << args << (++cnt < n ? ", " : "")), ...);
@@ -115,15 +124,48 @@ void _debug(const char* names, Args&&... args) {
 #define debug(...)
 #endif
 
-void process(){
+int n;
+vector<vi> a;
+void process()
+{
+    vector<vi> pref(n + 1, vector<int>(n + 1, 0));
+    vector<vi> dp(n + 1, vector<int>(n + 1, 0));
+    FORE(i, n)
+    {
+        FORE(j, n)
+        {
+            pref[i][j] = pref[i][j - 1] + pref[i - 1][j] - pref[i - 1][j - 1] + a[i][j];
+            if (i % 2 == 0 && j % 2 == 0)
+            {
+                int sum = pref[i][j] - pref[i - 2][j] - pref[i][j - 2] + pref[i - 2][j - 2];
+                int mod = sum % 4;
+                int eat = a[mod % 2 == 0 ? i - 1 : i][mod <  2 ? j - 1 : j];
+                dp[i][j] = eat;
 
+            }
+        }
+    }
 }
-int32_t main() {
+int32_t main()
+{
     fast_io;
     int t;
     cin >> t;
-    while(t--){
-        
+    while (t--)
+    {
+        cin >> n;
+        a.resize(n + 1);
+        FORN(i, n)
+        {
+            a[i + 1].resize(n + 1);
+        }
+        FOR(i, 1, n + 1)
+        {
+            FOR(j, 1, n + 1)
+            {
+                cin >> a[i][j];
+            }
+        }
         process();
     }
     return 0;

@@ -115,15 +115,33 @@ void _debug(const char* names, Args&&... args) {
 #define debug(...)
 #endif
 
+int n;
+vi g;
 void process(){
-
+    sort(g.begin(), g.end());
+    int i = n - 1;
+    int sum = 0;
+    while(i >= 0){
+        sum += g[i];
+        //  if(i == 0){
+        //     break;
+        // }
+        // if ( i  >= 2) i -= 2;
+        // else i = 0;
+        i -= 2;
+    }
+    cout << sum << endl;
 }
 int32_t main() {
     fast_io;
     int t;
     cin >> t;
     while(t--){
-        
+        cin >> n;
+        g.resize(n);
+        FORN(i, n){
+            cin >> g[i];
+        }
         process();
     }
     return 0;

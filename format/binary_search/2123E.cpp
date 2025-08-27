@@ -5,11 +5,11 @@ using namespace std;
 typedef long long ll;
 typedef unsigned long long ull;
 typedef long double ld;
-typedef pair<long long, long long> pii;
+typedef pair<int, int> pii;
 typedef pair<ll, ll> pll;
 typedef pair<double, double> pdd;
 
-typedef vector<long long> vi;
+typedef vector<int> vi;
 typedef vector<ll> vll;
 typedef vector<double> vd;
 typedef vector<string> vs;
@@ -18,16 +18,16 @@ typedef vector<pll> vpll;
 typedef vector<vi> vvi;
 typedef vector<vll> vvll;
 
-typedef set<long long> si;
+typedef set<int> si;
 typedef set<ll> sll;
 typedef set<string> ss;
-typedef multiset<long long> msi;
+typedef multiset<int> msi;
 typedef multiset<ll> msll;
 
-typedef map<long long, long long> mii;
+typedef map<int, int> mii;
 typedef map<ll, ll> mll;
-typedef map<string, long long> msi_str;
-typedef unordered_map<long long, long long> umii;
+typedef map<string, int> msi_str;
+typedef unordered_map<int, int> umii;
 typedef unordered_map<ll, ll> umll;
 
 const int INF = 1e9 + 7;
@@ -43,10 +43,8 @@ const int dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
 #define FOR(i, a, b) for(int i = (a); i < (b); i++)
 #define FORN(i, n) for(int i = 0; i < (n); i++)
-#define FORE(i, n) for(int i = 1; i <= (n); i++)
 #define FORR(i, a, b) for(int i = (a); i >= (b); i--)
 #define FORRN(i, n) for(int i = (n-1); i >= 0; i--)
-#define FORRE(i, n) for(int i = (n); i >= 1; i--)
 #define FOREACH(it, v) for(auto it = v.begin(); it != v.end(); it++)
 #define FOREACHR(it, v) for(auto it = v.rbegin(); it != v.rend(); it++)
 
@@ -80,7 +78,7 @@ const long long MAXX = 2e18;
 const long long MINX = -2e18;
 
 
-#define DEBUG 0
+#define DEBUG 1
  
 #if DEBUG
 #define del cout << '\n'
@@ -115,15 +113,42 @@ void _debug(const char* names, Args&&... args) {
 #define debug(...)
 #endif
 
-void process(){
+vi a;
+int n;
 
+void process(){
+    sort(a.begin(), a.end());
+
+    int max = 0;
+    vi countNum(n + 1, 0);
+    FORN(i, n){
+        if(a[i] > max ){
+            break;
+        }
+        if(a[i] == max){
+            max++;
+        }
+        if(a[i] < max){
+            countNum[max - 1]++;
+        }
+    }
+    vi k(n, 0);
+    FORN(i, n + 1){
+        
+    }
+    debug(a, max, countNum);
 }
+
 int32_t main() {
     fast_io;
     int t;
     cin >> t;
     while(t--){
-        
+        cin >> n;
+        a.resize(n); 
+        FORN(i, n){
+            cin >> a[i];
+        }
         process();
     }
     return 0;

@@ -78,7 +78,7 @@ const long long MAXX = 2e18;
 const long long MINX = -2e18;
 
 
-#define DEBUG 1
+#define DEBUG 0
  
 #if DEBUG
 #define del cout << '\n'
@@ -115,25 +115,26 @@ void _debug(const char* names, Args&&... args) {
 
 int n, b, c;
 vi d, p, f;
+
 int process(){
-    vector<vi> dp(n + 1, vi(c  + 1, MAXX));
+     vector<vector<int>> dp(n + 1, vector<int>(c + 1, MAXX));
     dp[0][b] = 0;
-    FOR(i,1, n + 1){ 
-        FOR(charge, 0, c + 1){
-            if(charge >= d[i]){
-                dp[i][charge - d[i]] = dp[i - 1][charge];
-                debug(charge);
+    for(int i = 1; i <= n; ++i){
+        for(int charge = 0; charge <= c; ++charge){
+            if(dp[i-1][charge] == MAXX) continue;
+            if(charge >= d[i]) {
+                dp[i][charge - d[i]] = min(dp[i][charge - d[i]], dp[i-1][charge]);
             }
-            int pay = dp[i - 1][charge] > MAXX - d[i] * f[i] ? MAXX : dp[i - 1][charge] + d[i] * f[i] ;
-            dp[i][min(c, charge + p[i])] = pay;
+            int add = d[i] * f[i];
+           int pay = dp[i-1][charge] > MAXX - add ? MAXX : dp[i - 1 ][charge] + add;
+            
+            int newc = min((int)c, (int)(charge + p[i]));
+            dp[i][newc] = min(dp[i][newc], pay);
         }
     }
     int ans = MAXX;
-    FOR(i, b, c + 1){
-        mini(ans, dp[n][i]);
-    }
-    debug(d, p, f);
-    return ans;
+    for(int i = b; i <= c; ++i) ans = min(ans, dp[n][i]);
+    return (int)ans;
 }
 int32_t main() {
     fast_io;
@@ -141,16 +142,16 @@ int32_t main() {
     cin >> t;
     while(t--){
         cin >> n >> b >> c;
-        d.resize(n + 1);
-        p.resize(n + 1);
-        f.resize(n + 1);
-        FOR(i,1, n + 1){
+        d.resize(n  + 1);
+        p.resize(n  + 1);
+        f.resize(n  + 1);
+        FOR(i, 1, n + 1){
             cin >> p[i];
         }
-         FOR(i,1, n + 1){
+         FOR(i, 1, n + 1){
             cin >> f[i];
         }
-         FOR(i,1, n + 1){
+         FOR(i, 1, n + 1){
             cin >> d[i];
         }
         cout << process() << endl;

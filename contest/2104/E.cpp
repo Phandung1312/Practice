@@ -80,7 +80,7 @@ const long long MAXX = 2e18;
 const long long MINX = -2e18;
 
 
-#define DEBUG 0
+#define DEBUG 00
  
 #if DEBUG
 #define del cout << '\n'
@@ -94,6 +94,18 @@ basic_ostream<Ch, Tr>& operator<<(basic_ostream<Ch, Tr>& os, Container const& x)
     int i = 0, n = (int)distance(x.begin(), x.end());
     os << "{ ";
     for (const auto& y : x) os << y << (++i < n ? ", " : "");
+    return os << " }";
+}
+template <class T>
+ostream& operator<<(ostream& os, queue<T> q) {
+    os << "{ ";
+    bool first = true;
+    while (!q.empty()) {
+        if (!first) os << ", ";
+        first = false;
+        os << q.front();
+        q.pop();
+    }
     return os << " }";
 }
 template <typename... Args>
@@ -114,17 +126,64 @@ void _debug(const char* names, Args&&... args) {
 #define del
 #define debug(...)
 #endif
+ 
+int n, k;
+string s;
+void process(){   
+    vector<vector<int>> nxt(n + 1, vector<int>(26, n));
+    FORRN(i, n){
+        nxt[i] = nxt[i + 1];
+        nxt[i][s[i] - 'a'] = i;
+    }
 
-void process(){
+    vi dp(n + 1, 1);
+    FORRN(i, n){
+         int best = n + 1;
+        FORN(j, k){
+           
+            int pos = nxt[i][j];
+            debug(pos);
+            if(pos == n){
+                best = 1;
+                break;
+            };
+            mini(best, 1 + dp[pos + 1]);
+            debug(best, dp);
 
+        }
+        dp[i] = best;
+      
+    }
+    debug(dp);
+    int q;
+    cin >> q;
+    cin.ignore();
+    while(q--){
+        string t;
+ 
+        getline(cin, t);
+        int posT = 0;
+        bool skip = false;
+        // debug(t);
+        FORN(i, t.length()){
+            posT = nxt[posT][t[i] - 'a'];
+            if(posT == n) {
+                skip = true;
+                break;
+            }
+            posT++;
+        }
+        // debug(posT, skip, nxt);
+        if(skip) cout << 0;
+        else cout <<  dp[posT] ;
+        cout << endl;
+    }
 }
 int32_t main() {
     fast_io;
-    int t;
-    cin >> t;
-    while(t--){
-        
-        process();
-    }
+    cin >> n >> k;
+    cin.ignore();
+    getline(cin, s);
+    process();
     return 0;
 }

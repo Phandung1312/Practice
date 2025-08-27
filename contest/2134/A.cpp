@@ -115,16 +115,25 @@ void _debug(const char* names, Args&&... args) {
 #define debug(...)
 #endif
 
-void process(){
+int n, a, b;
+string process(){
+        if((n - max(a,b)) %2 != 0 ) return "NO";
+    if(b >= a){
+        return "YES";
+    }
+    int result = abs(a - b);
+    if (result % 2 != 0) return "NO";
 
+ 
+    return "YES";
 }
 int32_t main() {
     fast_io;
     int t;
     cin >> t;
     while(t--){
-        
-        process();
+        cin >> n >> a >> b;
+       cout << process() << endl;
     }
     return 0;
 }

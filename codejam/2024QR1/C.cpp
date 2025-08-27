@@ -43,10 +43,8 @@ const int dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
 #define FOR(i, a, b) for(int i = (a); i < (b); i++)
 #define FORN(i, n) for(int i = 0; i < (n); i++)
-#define FORE(i, n) for(int i = 1; i <= (n); i++)
 #define FORR(i, a, b) for(int i = (a); i >= (b); i--)
 #define FORRN(i, n) for(int i = (n-1); i >= 0; i--)
-#define FORRE(i, n) for(int i = (n); i >= 1; i--)
 #define FOREACH(it, v) for(auto it = v.begin(); it != v.end(); it++)
 #define FOREACHR(it, v) for(auto it = v.rbegin(); it != v.rend(); it++)
 
@@ -115,16 +113,27 @@ void _debug(const char* names, Args&&... args) {
 #define debug(...)
 #endif
 
-void process(){
-
+int n;
+vi l, r;
+int process(){      
+    
+    return 1;
 }
 int32_t main() {
     fast_io;
     int t;
     cin >> t;
     while(t--){
-        
-        process();
+        cin >> n;
+        l.resize(n);
+        r.resize(n);
+        FORN(i, n){
+            cin >> l[i];
+        }
+        FORN(i, n){
+            cin >> r[i];
+        }
+       cout << process() << endl;
     }
     return 0;
 }
