@@ -115,15 +115,34 @@ void _debug(const char* names, Args&&... args) {
 #define debug(...)
 #endif
 
-void process(){
+string a, b, c;
 
+void process(){
+    int n = a.length();
+    int m = b.length();
+    vi dp(m + 1, 0);
+    FORE(j, m) dp[j] = dp[j - 1] + (b[j - 1] != c[j - 1]);
+    FORE(i, n){
+        vi ndp(m + 1, 0); 
+        ndp[0] = dp[0] + (a[i - 1] != c[i - 1]);
+        FORE(j, m){
+            int x = dp[j] + (a[i - 1] != c[i + j - 1]);
+            int y = ndp[j - 1] + (b[j - 1] != c[i + j - 1] );
+            ndp[j] = min(x, y);
+        }
+        dp.swap(ndp);
+    }
+    cout << dp[m] << endl;
 }
 int32_t main() {
     fast_io;
     int t;
     cin >> t;
+    cin.ignore();
     while(t--){
-        
+        getline(cin, a);
+        getline(cin, b);
+        getline(cin, c);
         process();
     }
     return 0;

@@ -80,7 +80,7 @@ const long long MAXX = 2e18;
 const long long MINX = -2e18;
 
 
-#define DEBUG 1
+#define DEBUG 0
  
 #if DEBUG
 #define del cout << '\n'
@@ -115,15 +115,34 @@ void _debug(const char* names, Args&&... args) {
 #define debug(...)
 #endif
 
-void process(){
+int n;
+vi a;
 
+void process(){
+    vector<int> dp(n + 2, 0);
+    dp[n + 1] = MAXX;
+    dp[n] = 0;
+    FORRN(i, n){
+        int keepIndex = i + a[i] + 1 ;
+        if(keepIndex > n) keepIndex = n + 1;  
+        int keep = dp[keepIndex];
+        int remove = dp[i + 1] + 1; 
+        dp[i] = min(keep, remove);
+    }
+    debug(dp);
+    cout << dp[0] << endl;
 }
 int32_t main() {
     fast_io;
     int t;
     cin >> t;
     while(t--){
-        
+        cin >> n;
+        a.resize(n);
+        FORN(i, n){
+            cin >> a[i];
+        }        
+        // debug(a);
         process();
     }
     return 0;
