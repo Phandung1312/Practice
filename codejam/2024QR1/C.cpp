@@ -113,48 +113,27 @@ void _debug(const char* names, Args&&... args) {
 #define debug(...)
 #endif
 
-int n, b, c;
-vi d, p, f;
-
-int process(){
-     vector<vector<int>> dp(n + 1, vector<int>(c + 1, MAXX));
-    dp[0][b] = 0;
-    for(int i = 1; i <= n; ++i){
-        for(int charge = 0; charge <= c; ++charge){
-            if(dp[i-1][charge] == MAXX) continue;
-            if(charge >= d[i]) {
-                dp[i][charge - d[i]] = min(dp[i][charge - d[i]], dp[i-1][charge]);
-            }
-            int add = d[i] * f[i];
-           int pay = dp[i-1][charge] > MAXX - add ? MAXX : dp[i - 1 ][charge] + add;
-            
-            int newc = min((int)c, (int)(charge + p[i]));
-            dp[i][newc] = min(dp[i][newc], pay);
-        }
-    }
-    int ans = MAXX;
-    for(int i = b; i <= c; ++i) ans = min(ans, dp[n][i]);
-    return (int)ans;
+int n;
+vi l, r;
+int process(){      
+    
+    return 1;
 }
 int32_t main() {
     fast_io;
     int t;
     cin >> t;
     while(t--){
-        cin >> n >> b >> c;
-        d.resize(n  + 1);
-        p.resize(n  + 1);
-        f.resize(n  + 1);
-        FOR(i, 1, n + 1){
-            cin >> p[i];
+        cin >> n;
+        l.resize(n);
+        r.resize(n);
+        FORN(i, n){
+            cin >> l[i];
         }
-         FOR(i, 1, n + 1){
-            cin >> f[i];
+        FORN(i, n){
+            cin >> r[i];
         }
-         FOR(i, 1, n + 1){
-            cin >> d[i];
-        }
-        cout << process() << endl;
+       cout << process() << endl;
     }
     return 0;
 }

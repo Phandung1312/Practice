@@ -5,11 +5,11 @@ using namespace std;
 typedef long long ll;
 typedef unsigned long long ull;
 typedef long double ld;
-typedef pair<long long, long long> pii;
+typedef pair<int, int> pii;
 typedef pair<ll, ll> pll;
 typedef pair<double, double> pdd;
 
-typedef vector<long long> vi;
+typedef vector<int> vi;
 typedef vector<ll> vll;
 typedef vector<double> vd;
 typedef vector<string> vs;
@@ -18,16 +18,16 @@ typedef vector<pll> vpll;
 typedef vector<vi> vvi;
 typedef vector<vll> vvll;
 
-typedef set<long long> si;
+typedef set<int> si;
 typedef set<ll> sll;
 typedef set<string> ss;
-typedef multiset<long long> msi;
+typedef multiset<int> msi;
 typedef multiset<ll> msll;
 
-typedef map<long long, long long> mii;
+typedef map<int, int> mii;
 typedef map<ll, ll> mll;
-typedef map<string, long long> msi_str;
-typedef unordered_map<long long, long long> umii;
+typedef map<string, int> msi_str;
+typedef unordered_map<int, int> umii;
 typedef unordered_map<ll, ll> umll;
 
 const int INF = 1e9 + 7;
@@ -78,7 +78,7 @@ const long long MAXX = 2e18;
 const long long MINX = -2e18;
 
 
-#define DEBUG 0
+#define DEBUG 1
  
 #if DEBUG
 #define del cout << '\n'
@@ -113,48 +113,43 @@ void _debug(const char* names, Args&&... args) {
 #define debug(...)
 #endif
 
-int n, b, c;
-vi d, p, f;
+vi a;
+int n;
 
-int process(){
-     vector<vector<int>> dp(n + 1, vector<int>(c + 1, MAXX));
-    dp[0][b] = 0;
-    for(int i = 1; i <= n; ++i){
-        for(int charge = 0; charge <= c; ++charge){
-            if(dp[i-1][charge] == MAXX) continue;
-            if(charge >= d[i]) {
-                dp[i][charge - d[i]] = min(dp[i][charge - d[i]], dp[i-1][charge]);
-            }
-            int add = d[i] * f[i];
-           int pay = dp[i-1][charge] > MAXX - add ? MAXX : dp[i - 1 ][charge] + add;
-            
-            int newc = min((int)c, (int)(charge + p[i]));
-            dp[i][newc] = min(dp[i][newc], pay);
+void process(){
+    sort(a.begin(), a.end());
+
+    int max = 0;
+    vi countNum(n + 1, 0);
+    FORN(i, n){
+        if(a[i] > max ){
+            break;
+        }
+        if(a[i] == max){
+            max++;
+        }
+        if(a[i] < max){
+            countNum[max - 1]++;
         }
     }
-    int ans = MAXX;
-    for(int i = b; i <= c; ++i) ans = min(ans, dp[n][i]);
-    return (int)ans;
+    vi k(n, 0);
+    FORN(i, n + 1){
+        
+    }
+    debug(a, max, countNum);
 }
+
 int32_t main() {
     fast_io;
     int t;
     cin >> t;
     while(t--){
-        cin >> n >> b >> c;
-        d.resize(n  + 1);
-        p.resize(n  + 1);
-        f.resize(n  + 1);
-        FOR(i, 1, n + 1){
-            cin >> p[i];
+        cin >> n;
+        a.resize(n); 
+        FORN(i, n){
+            cin >> a[i];
         }
-         FOR(i, 1, n + 1){
-            cin >> f[i];
-        }
-         FOR(i, 1, n + 1){
-            cin >> d[i];
-        }
-        cout << process() << endl;
+        process();
     }
     return 0;
 }

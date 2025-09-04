@@ -43,8 +43,10 @@ const int dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
 #define FOR(i, a, b) for(int i = (a); i < (b); i++)
 #define FORN(i, n) for(int i = 0; i < (n); i++)
+#define FORE(i, n) for(int i = 1; i <= (n); i++)
 #define FORR(i, a, b) for(int i = (a); i >= (b); i--)
 #define FORRN(i, n) for(int i = (n-1); i >= 0; i--)
+#define FORRE(i, n) for(int i = (n); i >= 1; i--)
 #define FOREACH(it, v) for(auto it = v.begin(); it != v.end(); it++)
 #define FOREACHR(it, v) for(auto it = v.rbegin(); it != v.rend(); it++)
 
@@ -113,48 +115,25 @@ void _debug(const char* names, Args&&... args) {
 #define debug(...)
 #endif
 
-int n, b, c;
-vi d, p, f;
-
-int process(){
-     vector<vector<int>> dp(n + 1, vector<int>(c + 1, MAXX));
-    dp[0][b] = 0;
-    for(int i = 1; i <= n; ++i){
-        for(int charge = 0; charge <= c; ++charge){
-            if(dp[i-1][charge] == MAXX) continue;
-            if(charge >= d[i]) {
-                dp[i][charge - d[i]] = min(dp[i][charge - d[i]], dp[i-1][charge]);
-            }
-            int add = d[i] * f[i];
-           int pay = dp[i-1][charge] > MAXX - add ? MAXX : dp[i - 1 ][charge] + add;
-            
-            int newc = min((int)c, (int)(charge + p[i]));
-            dp[i][newc] = min(dp[i][newc], pay);
-        }
+int n, a, b;
+string process(){
+        if((n - max(a,b)) %2 != 0 ) return "NO";
+    if(b >= a){
+        return "YES";
     }
-    int ans = MAXX;
-    for(int i = b; i <= c; ++i) ans = min(ans, dp[n][i]);
-    return (int)ans;
+    int result = abs(a - b);
+    if (result % 2 != 0) return "NO";
+
+ 
+    return "YES";
 }
 int32_t main() {
     fast_io;
     int t;
     cin >> t;
     while(t--){
-        cin >> n >> b >> c;
-        d.resize(n  + 1);
-        p.resize(n  + 1);
-        f.resize(n  + 1);
-        FOR(i, 1, n + 1){
-            cin >> p[i];
-        }
-         FOR(i, 1, n + 1){
-            cin >> f[i];
-        }
-         FOR(i, 1, n + 1){
-            cin >> d[i];
-        }
-        cout << process() << endl;
+        cin >> n >> a >> b;
+       cout << process() << endl;
     }
     return 0;
 }

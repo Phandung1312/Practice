@@ -78,7 +78,7 @@ const long long MAXX = 2e18;
 const long long MINX = -2e18;
 
 
-#define DEBUG 0
+#define DEBUG 1
  
 #if DEBUG
 #define del cout << '\n'
@@ -113,48 +113,80 @@ void _debug(const char* names, Args&&... args) {
 #define debug(...)
 #endif
 
-int n, b, c;
-vi d, p, f;
+int n;
+string x;
+vi v;
+void process(){
+    int m = x.length();
+    vi digit(m);
 
-int process(){
-     vector<vector<int>> dp(n + 1, vector<int>(c + 1, MAXX));
-    dp[0][b] = 0;
-    for(int i = 1; i <= n; ++i){
-        for(int charge = 0; charge <= c; ++charge){
-            if(dp[i-1][charge] == MAXX) continue;
-            if(charge >= d[i]) {
-                dp[i][charge - d[i]] = min(dp[i][charge - d[i]], dp[i-1][charge]);
-            }
-            int add = d[i] * f[i];
-           int pay = dp[i-1][charge] > MAXX - add ? MAXX : dp[i - 1 ][charge] + add;
-            
-            int newc = min((int)c, (int)(charge + p[i]));
-            dp[i][newc] = min(dp[i][newc], pay);
-        }
+    FORN(i, m){
+
+        digit[i] = x[i] - '0'; 
     }
-    int ans = MAXX;
-    for(int i = b; i <= c; ++i) ans = min(ans, dp[n][i]);
-    return (int)ans;
+    
+
+    int total = 1 << (m - 1);
+    vector<vector<int>> result(total, vector<int>(3,0));
+    FORN(i, total){
+        int current = digit[0];
+        int sum = 0;
+        int firstPlus = m - 2;
+        int lastPlus = m - 2;
+        int numPlus = 0;
+
+        FORN(j, m - 1){
+            bool isPlus = i & ( 1 << j);
+            if(isPlus){
+                sum += current;
+                current = digit[j + 1];
+                numPlus++;
+                mini(firstPlus, j);
+            }
+            else{
+                current = current*10 + digit[j + 1];
+            }
+            if(j == m - 2){
+                sum += current;
+            }
+    
+        }  
+        result[i] ={sum, i, numPlus};
+    }
+    sort(result.begin(), result.end(), [&](const vi& a, const vi& b){
+        if(a[0] != b[0]) return a[0] < b[0];
+        FORN(i, total){
+            int ba = (a[1] >> i) &1;
+            int bb = (b[1] >> i) &1;
+            if(ba != bb) return ba > bb;
+        }
+        return false;
+    });
+    int sumS = 0;
+    int sumV = 0;
+    FORN(i, n){
+        sumS += result[v[i] - 1][0];
+    }
+    FORN(i, n){
+        sumV += result[v[i] - 1][2];
+    }
+    // debug(result, total, m);
+    cout << sumS << ' ' << sumV  ;
 }
 int32_t main() {
     fast_io;
     int t;
     cin >> t;
     while(t--){
-        cin >> n >> b >> c;
-        d.resize(n  + 1);
-        p.resize(n  + 1);
-        f.resize(n  + 1);
-        FOR(i, 1, n + 1){
-            cin >> p[i];
+        cin >> n ;
+        cin >> x;
+        v.resize(n);
+        FORN(i, n){
+            cin >> v[i];
         }
-         FOR(i, 1, n + 1){
-            cin >> f[i];
-        }
-         FOR(i, 1, n + 1){
-            cin >> d[i];
-        }
-        cout << process() << endl;
+      
+        process();
+        cout << endl;
     }
     return 0;
 }

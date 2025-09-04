@@ -43,8 +43,10 @@ const int dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
 #define FOR(i, a, b) for(int i = (a); i < (b); i++)
 #define FORN(i, n) for(int i = 0; i < (n); i++)
+#define FORE(i, n) for(int i = 1; i <= (n); i++)
 #define FORR(i, a, b) for(int i = (a); i >= (b); i--)
 #define FORRN(i, n) for(int i = (n-1); i >= 0; i--)
+#define FORRE(i, n) for(int i = (n); i >= 1; i--)
 #define FOREACH(it, v) for(auto it = v.begin(); it != v.end(); it++)
 #define FOREACHR(it, v) for(auto it = v.rbegin(); it != v.rend(); it++)
 
@@ -74,8 +76,8 @@ const int dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 #define sp ' '
 
 #define int long long
-const long long MAXX = 2e18;
-const long long MINX = -2e18;
+const long long MAXX = 1e18;
+const long long MINX = -1e18;
 
 
 #define DEBUG 0
@@ -113,48 +115,85 @@ void _debug(const char* names, Args&&... args) {
 #define debug(...)
 #endif
 
-int n, b, c;
-vi d, p, f;
-
-int process(){
-     vector<vector<int>> dp(n + 1, vector<int>(c + 1, MAXX));
-    dp[0][b] = 0;
-    for(int i = 1; i <= n; ++i){
-        for(int charge = 0; charge <= c; ++charge){
-            if(dp[i-1][charge] == MAXX) continue;
-            if(charge >= d[i]) {
-                dp[i][charge - d[i]] = min(dp[i][charge - d[i]], dp[i-1][charge]);
+int n;
+vector<vi> grid;
+vi a;
+vi b;
+void process(){
+    vector<vector<int>> dpR(n, vector<int>(2, MAXX));
+    dpR[0][0] = 0;
+    dpR[0][1] = a[0];
+    FOR(i, 1, n){
+        FORN(x, 2){
+            FORN(y, 2){
+                bool isValid = true;
+                FORN(j, n){
+                    isValid &= ( grid[i - 1][j] + y ) !=  ( grid[i][j] + x );
+                }
+                if(isValid){
+                    if(x == 1){
+                        dpR[i][1] = min(dpR[i][1], dpR[i - 1][y] + a[i]);
+                    }
+                    else if(x == 0){
+                        dpR[i][0] = min(dpR[i][0], dpR[i - 1][y]);
+                    }
+                }
             }
-            int add = d[i] * f[i];
-           int pay = dp[i-1][charge] > MAXX - add ? MAXX : dp[i - 1 ][charge] + add;
-            
-            int newc = min((int)c, (int)(charge + p[i]));
-            dp[i][newc] = min(dp[i][newc], pay);
         }
     }
-    int ans = MAXX;
-    for(int i = b; i <= c; ++i) ans = min(ans, dp[n][i]);
-    return (int)ans;
+    debug(dpR);
+    vector<vector<int>> dpC(n, vector<int>(2, MAXX));
+    dpC[0][0] = 0;
+    dpC[0][1] = b[0];
+    FOR(j, 1, n){
+        FORN(x, 2){
+            FORN(y, 2){
+                bool isValid = true;
+                FORN(i, n){
+                    isValid &= (grid[i][j - 1] + y) != ( grid[i][j] + x ); 
+                }
+                if(isValid){
+                    if(x == 0){
+                        mini(dpC[j][0], dpC[j - 1][y]);
+                     }
+                     if(x == 1){
+                        mini(dpC[j][1], dpC[j - 1][y] + b[j]);
+                     }
+
+                }
+            }
+        }
+    }
+
+    int minR = min(dpR[n - 1][0], dpR[n - 1][1]);
+    int minC = min(dpC[n - 1][0], dpC[n - 1][1]);
+    if(minC >= MAXX || minR >= MAXX ) cout << -1 << endl;
+    else {
+        int ans = minR + minC;
+     cout << ans << endl;
+    }
 }
 int32_t main() {
     fast_io;
     int t;
     cin >> t;
     while(t--){
-        cin >> n >> b >> c;
-        d.resize(n  + 1);
-        p.resize(n  + 1);
-        f.resize(n  + 1);
-        FOR(i, 1, n + 1){
-            cin >> p[i];
+        cin >> n;
+        grid.assign(n, vector<int>(n));
+        a.resize(n);
+        b.resize(n);
+        FORN(i, n){
+            FORN(j, n){
+                cin >> grid[i][j];
+            }
         }
-         FOR(i, 1, n + 1){
-            cin >> f[i];
+        FORN(i, n){
+            cin >> a[i];
         }
-         FOR(i, 1, n + 1){
-            cin >> d[i];
+        FORN(i, n){
+            cin >> b[i];
         }
-        cout << process() << endl;
+        process();
     }
     return 0;
 }
