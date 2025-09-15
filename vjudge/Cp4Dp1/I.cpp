@@ -115,16 +115,23 @@ void _debug(const char* names, Args&&... args) {
 #define debug(...)
 #endif
 
+int n;
+vector<pii> blocks;
 void process(){
-
+    
 }
 int32_t main() {
-    fast_io;
-    int t;
-    cin >> t;
-    while(t--){
-        
+    fast_io;    
+    while(cin >> n){
+        if(n == 0) break;
+        blocks.resize(n);
+        FORN(i, n){
+            int a, b;
+            cin >> a >> b;
+            blocks[i] = {a, b};
+        }
         process();
     }
+    cout << "*" << endl;
     return 0;
 }

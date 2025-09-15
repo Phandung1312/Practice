@@ -115,16 +115,76 @@ void _debug(const char* names, Args&&... args) {
 #define debug(...)
 #endif
 
+int r,s,k;
+vector<vector<int>> grid;
 void process(){
+    vector<vector<int>> pref(r + 1, vector<int>(s + 1, 0));
+    FORE(i, r){
+        FORE(j, s){
+            pref[i][j] = pref[i - 1][j] + pref[i][j - 1] - pref[i - 1][j - 1] + grid[i][j];
+        }
+    }
+    int max = 0;
+    pii pairMax = {1, 1};
 
+    FORE(i, r - k + 1){
+        FORE(j, s - k + 1){
+            int belowX = i + k - 1 ;
+            int belowY = j + k - 1;
+            int value = pref[belowX - 1][belowY - 1] - pref[i][belowY - 1] - pref[belowX - 1][j] + pref[i][j];
+            if(value >= max){
+                max = value;
+                pairMax = {i, j};
+            }
+           
+        }
+    }
+    auto [x, y] = pairMax;
+    pii angles1 = {x, y};
+    pii angles2 = {x, y + k - 1};
+    pii angles3 = {x + k - 1, y};
+    pii angles4 = {x + k - 1, y + k - 1};
+    cout << max << endl;
+    FORE(i, r){
+        FORE(j, s){
+            pii coor = {i, j};
+            auto [x2, y2] = angles4;
+            if( i < x || i > x2 || j < y || j > y2 ){
+                cout << (grid[i][j] == 1 ? '*' : '.');
+            }
+
+            else 
+            if(coor == angles1 || coor == angles2 || coor == angles3 || coor == angles4){
+                // debug(coor);
+                cout << '+';
+            }
+            else if(i == x || i == x2){
+                cout << '-';
+            }
+            else if(j == y || j == y2){
+                cout << '|';
+            }
+            else {
+                cout << (grid[i][j] == 1 ? '*' : '.');
+            }
+        }
+        cout << endl;
+    }
+    // debug(angles1, angles2, angles3, angles4);
 }
 int32_t main() {
     fast_io;
-    int t;
-    cin >> t;
-    while(t--){
-        
+
+        cin >> r >> s >> k;
+        grid.assign(r + 1, vector<int>(s + 1));
+        FORE(i, r){
+            FORE(j, s){
+                char c;
+                cin >> c;
+                grid[i][j] = c == '*' ? 1 : 0; 
+            }
+        }
         process();
-    }
+    
     return 0;
 }
