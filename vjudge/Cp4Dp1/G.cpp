@@ -115,15 +115,55 @@ void _debug(const char* names, Args&&... args) {
 #define debug(...)
 #endif
 
+int n;
+vector<pair<int, double>> prof;
+bool isOptimal(pii a, pii b){
+    return (a.second - a.first) <= (b.second - b.first);
+}
 void process(){
+    vector<double> dp(n + 1, -150);
+    pair<int, int> maxPair = {0, 0};
+    int start = 0;
+    double current = 0;
+    FORE(i, n){
+        double conV = prof[i].second - (prof[i].first - prof[i - 1].first)*0.08;
+        double realSum = conV + current;
+        double skipV = prof[i].second - 0.08;
+        // debug(conV,current, skipV, start);
+        if(realSum > skipV ){
+            current += conV;
+        }
+        else if(realSum <= skipV){
+            current = skipV;
+            start = i;        }
 
+        dp[i] = max(dp[i - 1], current);
+        if(  dp[i] > dp[i - 1]){
+            maxPair = {start, i};
+        } else if(dp[i] == dp[i - 1] && !isOptimal({prof[maxPair.first].first, prof[maxPair.second].first}, {prof[start].first, prof[i].first})){
+            maxPair = {start, i};
+        };
+    }
+    // debug(dp);
+    if(dp[n] <= 0){
+        cout << "no profit" << endl;
+    }
+    else cout << dp[n] << ' ' << prof[maxPair.first].first << " " << prof[maxPair.second].first << endl;
 }
 int32_t main() {
     fast_io;
-    int t;
-    cin >> t;
-    while(t--){
-        
+    while(true){
+        cin >> n;
+        if(n == 0) break;
+        prof.resize(n + 1);
+        prof[0] = {0, 0};
+        FORE(i, n){
+            int a;
+            double b;
+            cin >> a;
+            cin >> b;
+            prof[i] = {a, b};
+        } 
         process();
     }
     return 0;

@@ -115,16 +115,44 @@ void _debug(const char* names, Args&&... args) {
 #define debug(...)
 #endif
 
+int n, p;
+vi a;
 void process(){
+    FORN(i, n){
+        a[i] = a[i] - p;
+    }
+    // debug(a);
+    int result = 0;
+    int current = 0;
+    FORN(i, n){
+        if(a[i] >= 0){
+            current += a[i];
+        }
+        else{
+            if(current + a[i] <=0 ) {
+                current = 0;
+                continue;
+            }
+            else{
+                current += a[i];
+            }
+        }
+         maxi(result, current);
+    }
 
+    cout << result << endl;
 }
 int32_t main() {
     fast_io;
-    int t;
-    cin >> t;
-    while(t--){
-        
+    // int t;
+    // cin >> t;
+    // while(t--){
+        cin >> n >> p;
+        a.resize(n);
+        FORN(i, n){
+            cin >> a[i];
+        }
         process();
-    }
+    // }
     return 0;
 }

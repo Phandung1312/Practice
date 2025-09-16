@@ -114,16 +114,54 @@ void _debug(const char* names, Args&&... args) {
 #define del
 #define debug(...)
 #endif
+int x, y;
+int sX, sY;
+int n;
+vector<pii> beeps;
+
 
 void process(){
-
+   vector<vector<int>> dp(n + 1, vector<int>(1 << n, INF));
+  
+    dp[0][0] = 0;
+   FORN(mask, 1 << n){
+        int index = __builtin_popcount(mask);
+        FORN(i, n + 1){
+            int current = dp[i][mask];
+            if(current == INF) continue;
+            FORE(j, n){
+                if((mask >> (j - 1)) & 1 ) continue;
+                int nmask = mask | (1 << (j - 1));
+                int cost = abs(beeps[i].first - beeps[j].first) + abs(beeps[i].second - beeps[j].second);
+                dp[j][nmask] = min(dp[j][nmask], cost + current);
+            }
+           
+        }
+   }
+   int result = INF;
+   
+   FORN(i, n + 1){
+        result = min(result, dp[i][(1 << n) - 1] 
+        + abs(beeps[i].first - beeps[0].first) + abs(beeps[i].second - beeps[0].second));
+   }
+   cout << result << endl;
 }
 int32_t main() {
     fast_io;
     int t;
     cin >> t;
     while(t--){
-        
+        cin >> x >> y;
+    
+        cin >> sX >> sY;
+        cin >> n;
+        beeps.resize(n + 1);
+        beeps[0] = {sX, sY};
+        FORN(i, n){
+            int a , b;
+            cin >> a >> b;
+            beeps[i + 1] = {a, b};
+        }
         process();
     }
     return 0;

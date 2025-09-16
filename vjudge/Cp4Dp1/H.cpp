@@ -115,16 +115,48 @@ void _debug(const char* names, Args&&... args) {
 #define debug(...)
 #endif
 
+int n;
+vi a;
 void process(){
-
+    vi seq;
+    vi indexs;
+    vi pref(n, -1);
+    FORN(i, n){
+        auto it = lower_bound(seq.begin(), seq.end(), a[i]);
+        int k = (it - seq.begin());
+        if(k > 0)  pref[i] = indexs[k - 1];
+        if(it == seq.end()){
+            seq.push_back(a[i]);
+            indexs.push_back(i);
+        } 
+        else{
+            *it = a[i];
+            indexs[k] = i;
+        }
+    }
+    int length = seq.size();
+    int index = indexs.back();
+    vi result;
+    // debug(seq);
+    while(index != -1){
+        result.push_back(a[index]);
+        index = pref[index];
+    }
+    reverse(result.begin(), result.end());
+    cout << length << endl;
+    cout << '-' << endl;
+    FORN(i, length){
+        cout << result[i] << endl;
+    }
 }
 int32_t main() {
     fast_io;
-    int t;
-    cin >> t;
-    while(t--){
-        
-        process();
+    string line;
+    while(getline(cin, line)){
+        if(line.empty()) break;
+        a.push_back(stol(line));
     }
+    n = a.size();
+    process();
     return 0;
 }

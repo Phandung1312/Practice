@@ -92,9 +92,9 @@ ostream& operator<<(ostream& os, pair<X, Y> const& p) {
 template <class Ch, class Tr, class Container>
 basic_ostream<Ch, Tr>& operator<<(basic_ostream<Ch, Tr>& os, Container const& x) {
     int i = 0, n = (int)distance(x.begin(), x.end());
-    os << "{ ";
+    os << "[ ";
     for (const auto& y : x) os << y << (++i < n ? ", " : "");
-    return os << " }";
+    return os << " ]" << endl;
 }
 template <typename... Args>
 void _debug(const char* names, Args&&... args) {
