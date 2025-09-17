@@ -110,21 +110,99 @@ void _debug(const char* names, Args&&... args) {
     ((cout << next() << ": " << args << (++cnt < n ? ", " : "")), ...);
     cout << " }" << '\n';
 }
+
 #else
 #define del
 #define debug(...)
 #endif
 
-void process(){
+int n;
+vi h;
+vi w;
+int findAdd(vector<pii>& arr, int x){
+   
+    debug(x, arr);
 
+    auto it = upper_bound(arr.begin(), arr.end(), x,[](const int& a, const pii& p){
+        return p.first < a;
+    });
+    if(it != arr.end()){
+        debug(it->second);
+        return it->second;
+    }
+    return 0;
+}
+void caculSum(vi& a, int start, int end, int trans){
+    vi seq;
+    vi indexs;
+    vector<vector<pii>> maxIndexs;
+    for(int i = start; i*trans <= end*trans; i+=trans){
+        auto it = lower_bound(seq.begin(), seq.end(), h[i]);
+        int k = (it - seq.begin());
+        debug(k);
+        a[i] = k > 0 ? w[i] + findAdd(maxIndexs[k - 1], h[i]) : w[i];
+ 
+        if(it == seq.end()){
+            seq.push_back(h[i]);
+            maxIndexs.push_back(vector<pii>(1, {h[i], a[i]}));
+        }
+        else{
+            *it = h[i];
+            auto greater = upper_bound(maxIndexs[k].begin(), maxIndexs[k].end(), a[i], [](const int& a, const pii& p){
+                return p.second <= a;
+            });
+            int idx = (greater - maxIndexs[k].begin());
+            if(idx < maxIndexs[k].size()) {
+                // debug(idx, maxIndexs[k]);
+                maxIndexs[k].resize(idx);
+            };
+            maxIndexs[k].push_back({h[i], a[i]});
+            // debug(k,maxIndexs[k]);
+        }
+    }
+}
+void process(int Case ){
+    vi inc(n, 0);
+    vi dec(n, 0);
+    caculSum(inc, 0, n - 1, 1);
+    // caculSum(dec, n - 1, 0, -1);
+    debug(inc);
+    debug(dec);
+     int result = 0;
+     int maxV = 0;
+     int minV = 0;
+    FORN(i, n){
+        maxi(maxV, inc[i]);
+        maxi(minV, dec[i]);
+    }
+    cout << "Case "<< Case << ". ";
+    if(maxV >= minV){
+        cout << "Increasing (" << maxV << "). ";
+        cout << "Decreasing (" << minV << ").";
+    }
+    else{
+        cout << "Decreasing (" << minV << "). ";
+        cout << "Increasing (" << maxV << ").";
+    }
+    cout << endl;
 }
 int32_t main() {
     fast_io;
     int t;
     cin >> t;
+    int Case = 0;
     while(t--){
-        
-        process();
+        cin >> n;
+        Case++;
+        h.resize(n);
+        w.resize(n);
+        FORN(i, n){
+            cin >> h[i];
+        }
+        FORN(i, n){
+            cin >> w[i];
+        }
+        process(Case);
     }
     return 0;
 }

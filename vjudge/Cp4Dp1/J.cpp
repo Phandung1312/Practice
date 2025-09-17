@@ -152,7 +152,7 @@ void process(){
     FORN(i, n){
         result = max(min(inc[i], dec[i]), result);
     }
-    // debug(inc, dec);
+    debug(inc, dec);
     cout << result * 2 + 1 << endl;
 }
 int32_t main() {
